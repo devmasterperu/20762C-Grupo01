@@ -1,4 +1,4 @@
-/*Foreign Keys + cascade option*/
+﻿/*Foreign Keys + cascade option*/
 
 create table t1
 (
@@ -99,7 +99,7 @@ create table Person
  name varchar(100)
 )
 
-insert into Person(name) values ('Jes�s'),('Juan')
+insert into Person(name) values ('Jesús'),('Juan')
 
 select * from Person
 
@@ -177,3 +177,34 @@ SELECT PARSE('12/11/2010' AS datetime2) AS Result;
 SELECT TRY_CAST('93751' AS int) AS ConvertedString;
 SELECT TRY_CAST('93751.3' AS int) AS ConvertedString;
 SELECT TRY_CONVERT(int,'93751.3') AS ConvertedInteger;
+
+/*Working with International Character Data*/
+
+DECLARE @Hello nvarchar(10);
+SET @Hello = N'Hello';
+SET @Hello = N'こんにちは';
+SET @Hello = N'你好';
+
+create table Test
+(
+col1 varchar(1000),
+col2 varchar(1000),
+col3 nvarchar(1000)
+)
+
+truncate table Test
+insert into Test(col1,col2,col3) values 
+('english','Hello',N'Hello'),
+('japanese',N'こんにちは',N'こんにちは'),
+('chinese',N'你好',N'你好')
+
+select * from dbo.Test
+
+select col1,col3,len(col3) as size from Test         --Número de caracteres
+select col1,col2,datalength(col2) as bytes from Test --varchar: 1byte x caracter
+select col1,col3,datalength(col3) as bytes from Test --nvarchar: 2byte x caracter
+
+select * from Test
+
+--select * from dbo.Test
+--select * from dev.Test
