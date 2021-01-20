@@ -33,15 +33,17 @@ ON pm.ProductModelID = p.ProductModelID
 WHERE pm.ProductModelID=122 or pm.ProductModelID=119
 FOR XML AUTO;
 
--- Step 4 - Execute an EXPLICIT mode query
+SELECT pm.ProductModelID, 
+	   p.Name AS ProductName,
+	   pm.Name AS ProductModel
+FROM Production.Product AS p
+INNER JOIN Production.ProductModel AS pm
+ON pm.ProductModelID = p.ProductModelID 
+WHERE pm.ProductModelID=122 or pm.ProductModelID=119
+FOR XML AUTO;
 
-SELECT 1 AS Tag, NULL AS Parent,
-       ProductID AS [Product!1!ProductID],
-       Color AS [Product!1!Color!Element]
-FROM Production.Product 
-ORDER BY ProductID
-FOR XML EXPLICIT;
-GO
+
+-- Step 4 - Execute an EXPLICIT mode query
 
 -- Step 5 - Execute PATH mode queries (and compare the queries and output)
 
@@ -51,6 +53,7 @@ FROM Production.ProductModel
 WHERE ProductModelID IN (119,122)
 FOR XML PATH ('ProductModel');
 GO
+
 SELECT ProductModelID AS "@ProductModelID",
        Name
 FROM Production.ProductModel
@@ -67,8 +70,7 @@ ON BA.AddressID = Address.AddressID
 ORDER BY FirstName, LastName
 FOR XML PATH ('Employee'), ROOT ('Employees'), ELEMENTS;
 
-SELECT TOP 3 FirstName, LastName, Address.AddressID AS 'Address/@AddressID', City AS
-"Address/City"
+SELECT TOP 3 FirstName, LastName, Address.AddressID AS 'Address/@AddressID', City AS "Address/City"
 FROM Person.Person AS Employee
 INNER JOIN Person.BusinessEntityAddress AS BA
 ON BA.BusinessEntityID = Employee.BusinessEntityID
@@ -87,8 +89,10 @@ SELECT Customer.CustomerID, Customer.TerritoryID,
 FROM Sales.Customer as Customer
 WHERE EXISTS
   (SELECT 1 FROM Sales.SalesOrderHeader AS soh
-   WHERE soh.CustomerID = Customer.CustomerID)				
+   WHERE soh.CustomerID = Customer.CustomerID)	
+  --AND Customer.CustomerID=11000
 ORDER BY Customer.CustomerID;
+
 
 -- Step 7 - Now show the same query without the TYPE to highlight the difference
 

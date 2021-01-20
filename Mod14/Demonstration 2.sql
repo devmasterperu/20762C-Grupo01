@@ -45,28 +45,26 @@ GO
 
 CREATE TABLE dbo.ProductImport
 ( ProductImportID int IDENTITY(1,1) PRIMARY KEY,
-  ProductDetails xml (CONTENT dbo.ProductDetailsSchema)
+  --ProductDetails xml (CONTENT dbo.ProductDetailsSchema)
+  ProductDetails xml (DOCUMENT dbo.ProductDetailsSchema)
 );
 GO
 
 -- Step 4 - Try to insert malformed xml. Note that this will fail.
 
-INSERT INTO dbo.ProductImport 
-  (ProductDetails)
-  VALUES ('<invalid xml');
+INSERT INTO dbo.ProductImport(ProductDetails) VALUES ('<invalid xml');
 GO
 
 -- Step 5 - Try to insert well-formed XML that does not conform to the schema. Note that this will fail.
 
-INSERT INTO dbo.ProductImport 
-  (ProductDetails)
-  VALUES ('<validxml><node1>hello</node1></validxml>');
+INSERT INTO dbo.ProductImport(ProductDetails)VALUES ('<validxml><node1>hello</node1></validxml>');
 GO
 
 -- Step 6 - Try to insert a single row fragment. Note that this will succeed.
 
 INSERT INTO dbo.ProductImport 
   (ProductDetails)
+  OUTPUT inserted.ProductDetails
   VALUES ('<Production.Product xmlns="urn:schemas-microsoft-com:sql:SqlRowSet3" ProductID="1" Name="Adjustable Race" ListPrice="0.0000" />');
 GO
 
@@ -74,6 +72,7 @@ GO
 
 INSERT INTO dbo.ProductImport 
   (ProductDetails)
+OUTPUT inserted.ProductDetails
   VALUES ('
 <Production.Product xmlns="urn:schemas-microsoft-com:sql:SqlRowSet3" ProductID="1" Name="Adjustable Race" ListPrice="0.0000" />
 <Production.Product xmlns="urn:schemas-microsoft-com:sql:SqlRowSet3" ProductID="2" Name="Bearing Ball" ListPrice="0.0000" />

@@ -41,23 +41,27 @@ CREATE PRIMARY XML INDEX IX_ProductImport_ProductDetails
 ON dbo.ProductImport (ProductDetails);
 GO
 
--- Step 7 - Querying using primary and secondary indexs.
+-- Step 7 - Querying using primary and secondary indexes.
 
 USE AdventureWorks
 GO
 
+select Demographics from Person.Person
 -- create primary XML index
 CREATE PRIMARY XML INDEX PXML_Person_Demographics ON Person.Person (Demographics);
 
 -- create secondary XML indexes
 CREATE XML INDEX XMLPATH_Person_Demographics ON Person.Person (Demographics)
-USING XML INDEX PXML_Person_Demographics FOR PATH;
+USING XML INDEX PXML_Person_Demographics 
+FOR PATH;
 
 CREATE XML INDEX XMLPROPERTY_Person_Demographics ON Person.Person (Demographics)
-USING XML INDEX PXML_Person_Demographics FOR PROPERTY;
+USING XML INDEX PXML_Person_Demographics 
+FOR PROPERTY;
 
 CREATE XML INDEX XMLVALUE_Person_Demographics ON Person.Person (Demographics)
-USING XML INDEX PXML_Person_Demographics FOR VALUE;
+USING XML INDEX PXML_Person_Demographics 
+FOR VALUE;
 
 --select Demographics from Person.Person
 set statistics io on
