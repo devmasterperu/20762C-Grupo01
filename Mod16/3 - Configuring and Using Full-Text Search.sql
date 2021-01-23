@@ -7,6 +7,8 @@
 USE AdventureWorks2016;
 GO
 
+SELECT * from sys.indexes
+
 SELECT t.name AS IndexedTable, c.name AS FullTextCatalog, i.name AS IndexName, cl.name AS ColumnName
 FROM sys.tables t 
 INNER JOIN sys.fulltext_indexes fi 
@@ -32,6 +34,7 @@ GO
 -- Select and execute the following statements to create a new unique index
 -- for the ProductDescription table. Note that this is not the full-text index.
 -- Instead this index will be used and the index key for the full-text index.
+SELECT * FROM Production.ProductDescription
 
 CREATE UNIQUE INDEX ui_ProductDescriptionID ON Production.ProductDescription(ProductDescriptionID);
 GO
@@ -39,6 +42,19 @@ GO
 -- Step 4: Create a Full-Text Index
 -- Select and execute the following statements to create a new full-text index
 -- for the ProductDescription table.
+
+--CREATE FULLTEXT INDEX ON HumanResources.Employees
+--(
+--	FullName Language 1033,
+--	EmailAddress Language 1033,
+--	Skills Language 1033,
+--	Resume TYPE COLUMN [file_type] Language 1033
+--)
+--KEY INDEX EmployeeID
+--ON HRCatalog;
+--GO
+
+SELECT * FROM Production.ProductDescription
 
 CREATE FULLTEXT INDEX ON Production.ProductDescription
   ( 
@@ -64,3 +80,5 @@ WHERE CONTAINS(Description, 'ride');
 SELECT ProductDescriptionID, Description
 FROM Production.ProductDescription
 WHERE CONTAINS(Description, 'FORMSOF(INFLECTIONAL, ride)');
+
+

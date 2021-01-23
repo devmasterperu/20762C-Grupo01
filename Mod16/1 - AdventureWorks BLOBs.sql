@@ -16,6 +16,10 @@ WHERE DATA_TYPE = 'varbinary'
 AND CHARACTER_MAXIMUM_LENGTH = -1;
 GO
 
+SELECT ThumbNailPhoto,LargePhoto FROM Production.ProductPhoto
+
+SELECT Document FROM Production.Document
+
 -- Step 3: Check for FILESTREAM columns
 -- Select and execute the following query to find out if the LargePhoto column is a FILESTREAM column
 
